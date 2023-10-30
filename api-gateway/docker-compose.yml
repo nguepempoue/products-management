@@ -1,0 +1,45 @@
+services:
+  api-gateway:
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres_keycloak_demo
+      KC_DB_URL_DATABASE: keycloack_demo
+      KC_DB_PASSWORD: julio
+      KC_DB_USERNAME: postgres
+      KC_DB_SCHEMA: public
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+    depends_on:
+      postgres_keycloak_demo:
+        condition: service_healthy
+    networks:
+      - keycloak_demo_dev_network
+  postgres_keycloak_demo:
+    image: "postgres:14.4"
+    command: postgres -c 'max_connections=200'
+    volumes:
+    - postgres_keycloak_demo:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloack_demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: julio
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - "5432:5432"
+    networks:
+      - keycloak_demo_dev_network
+volumes:
+  postgres_keycloak_demo:
+networks:
+  keycloak_demo_dev_network:
+    driver: bridge
+
+
+
+
+
