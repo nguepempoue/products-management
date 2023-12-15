@@ -3,7 +3,10 @@ services:
     image: quay.io/keycloak/keycloak:22.0.5
     command: start-dev
     environment:
-      KC_DB: postgres
+
+    ports:
+      - "8180:8080"
+    depends_on:KC_DB: postgres
       KC_DB_URL_HOST: postgres_keycloak_demo
       KC_DB_URL_DATABASE: keycloack_demo
       KC_DB_PASSWORD: julio
@@ -11,9 +14,6 @@ services:
       KC_DB_SCHEMA: public
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    ports:
-      - "8180:8080"
-    depends_on:
       postgres_keycloak_demo:
         condition: service_healthy
     networks:
