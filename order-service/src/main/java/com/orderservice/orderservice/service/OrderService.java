@@ -27,7 +27,7 @@ public class OrderService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public void placeOlder(OrderRequest orderRequest){
+    public String placeOlder(OrderRequest orderRequest){
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
 
@@ -57,6 +57,7 @@ public class OrderService {
         if(allProductinStock){
 
             orderRepository.save(order);
+            return "Order saved successfully !";
 
         }else{
             throw new IllegalStateException("Product is not in stock, please try agan later");
